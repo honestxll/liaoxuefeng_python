@@ -113,3 +113,43 @@ print([i.lower() for i in L])
 '''
 L = ['Hello', 123, 'IBM', 456]
 print([i.lower() for i in L if isinstance(i, str)])
+
+'''
+通过列表生成式，我们可以直接创建一个列表。
+但是，受到内存限制，列表容量肯定是有限的。
+而且，创建一个包含100万个元素的列表，不仅占用很大的存储空间，
+如果我们仅仅需要访问前面几个元素，那后面绝大多数元素占用的空间都白白浪费了
+所以，如果列表元素可以按照某种算法推算出来，那我们是否可以在循环的过程中不断推算出后续的元素呢？
+这样就不必创建完整的list，从而节省大量的空间。在Python中，这种一边循环一边计算的机制，称为生成器：generator。
+'''
+L = [x * x for x in range(10)]
+g = (x * x for x in range(10))
+print(L, g)
+print(next(g), next(g))
+#当然，上面这种不断调用next(g)实在是太变态了，正确的方法是使用for循环，因为generator也是可迭代对象：
+for n in g:
+    print(n)
+#所以，我们创建了一个generator后，基本上永远不会调用next()，而是通过for循环来迭代它，并且不需要关心StopIteration的错误。
+'''
+generator非常强大。如果推算的算法比较复杂，用类似列表生成式的for循环无法实现的时候，还可以用函数来实现。
+比如著名的斐波拉契数列（Fibonacci），除第一个和第二个数外，任意一个数都可由前两个数相加得到：
+1, 1, 2, 3, 5, 8, 13, 21, 34, ...
+'''
+def fib(max):
+    n, a, b = 0, 0, 1
+    while n < max:
+        print(b)
+        a, b = b, a + b
+        n = n + 1
+fib(9)
+# 现在我们用 generator 来表示
+def fib(max):
+    n, a, b = 0, 0, 1
+    while n < max:
+        yield b
+        a, b = b, a + b
+        n = n + 1
+f = fib(9)
+print(next(f), next(f), next(f), next(f))
+for n in fib(20):
+    print(n)
