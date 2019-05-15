@@ -153,3 +153,10 @@ f = fib(9)
 print(next(f), next(f), next(f), next(f))
 for n in fib(20):
     print(n)
+
+
+
+# 可以被 next() 函数调用并不断返回下一个值对象称为迭代器: Iterator
+# 我们可以用 iter 函数把 Iterable 变成 Iterator
+l = iter([1, 2, 4])
+print(next(l), next(l))
